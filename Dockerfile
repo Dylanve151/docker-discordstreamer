@@ -1,17 +1,22 @@
 FROM debian
 RUN apt-get update && apt-get install -y \
-  wakeonlan \
-  cron \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  default-jre \
+  wget \
+  novnc \
+  python3-websockify \
+  x11vnc \
+  xvfb
 RUN mkdir /verbs
+VOLUME ["/root/.runelite"]
+VOLUME ["/root/jagexcache"]
 WORKDIR /root
-ENV BROADCAST_IP 192.168.1.255
-ENV CRONTIME 0 12 * * *
-ENV MAC_ADDRESS 00:00:00:00:00:00
+ENV PASSWORD 1234
+ENV SCREENSIZE 1048x504x24
 COPY startup.sh .
-COPY addcronjob.bash .
-COPY wakeup.bash .
-RUN touch log.log
+RUN mkdir /root/.vnc
+RUN wget https://github.com/runelite/launcher/releases/latest/download/RuneLite.jar
+RUN openssl req -x509 -nodes -newkey rsa:3072 -keyout novnc.pem -out novnc.pem -days 3650 -subj '/CN=localhost/O=Corp/C=EU'
 RUN chmod 755 *.sh
-RUN chmod 755 *.bash
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+EXPOSE 6080
 CMD [ "/root/startup.sh" ]
