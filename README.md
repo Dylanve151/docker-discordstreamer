@@ -10,4 +10,4 @@ docker build --name="discord_streamer" --restart="always" dylanve115/discordstre
 ### Required:
 PASSWORD = VNC Password
 
-SCREENSIZE = Screen resolution of virtual screen (By default: 1048x504x24 as this machtes up with RuneLite with the settings bar open.)
+SCREENSIZE = Screen resolution of virtual screen (By default: 1920x1080x24)
