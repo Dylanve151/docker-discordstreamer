@@ -1,15 +1,12 @@
 #!/bin/bash
 #startup script
 
-bash /root/addcronjob.bash
-
-echo "$BROADCAST_IP" > /verbs/BROADCAST_IP
-echo "$MAC_ADDRESS" > /verbs/MAC_ADDRESS
-if [ -z "$TRIGGER_IP" ]
-then
-	echo "No Trigger IP" >> log.log
-else
-	echo "$TRIGGER_IP" > /verbs/TRIGGER_IP
+if [ ! -f "/root/.vnc/passwd" ]; then
+    x11vnc -storepasswd $PASSWORD /root/.vnc/passwd
 fi
-service cron start
-tail -fn0 log.log
+websockify -D --web=/usr/share/novnc/ --cert=/root/novnc.pem 6080 localhost:5900
+Xvfb :20 -screen 0 $SCREENSIZE &
+export DISPLAY=:20
+java -jar /root/RuneLite.jar
+unset DISPLAY
+x11vnc -forever -shared -usepw -display :20
