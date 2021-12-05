@@ -3,7 +3,7 @@ RUN apt-get update && apt-get install -y \
   wget \
   novnc \
   python3-websockify \
-  chromium \
+  firefox-esr \
   x11vnc \
   xvfb
 RUN mkdir /verbs
